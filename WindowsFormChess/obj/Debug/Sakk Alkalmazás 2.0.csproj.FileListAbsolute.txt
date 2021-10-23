@@ -1,0 +1,13 @@
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk_Alkalmazás_2._0.Properties.Resources.resources
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk Alkalmazás 2.0.csproj.GenerateResource.cache
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk Alkalmazás 2.0.csproj.CoreCompileInputs.cache
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\bin\Debug\Sakk Alkalmazás 2.0.exe.config
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\bin\Debug\Sakk Alkalmazás 2.0.exe
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\bin\Debug\Sakk Alkalmazás 2.0.pdb
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk Alkalmazás 2.0.exe
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk Alkalmazás 2.0.pdb
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk_Alkalmazás_2._0.MainMenu.resources
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk_Alkalmazás_2._0.ConnectionForm.resources
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk_Alkalmazás_2._0.InGameForm.resources
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk Alkalmazás 2.0.csproj.AssemblyReference.cache
+C:\Users\csuka\source\repos\Sakk Alkalmazás 2.0\Sakk Alkalmazás 2.0\obj\Debug\Sakk_Alkalmazás_2._0.PromotionForm.resources

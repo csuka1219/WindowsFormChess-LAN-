@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7025ADF0-8390-4CB5-9EA0-BDEFF5D3FE73}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Sakk_Alkalmazás_2._0</RootNamespace>
+    <AssemblyName>Sakk Alkalmazás 2.0</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BlackPieces\BlackBishop2.cs" />
+    <Compile Include="BlackPieces\BlackKnight2.cs" />
+    <Compile Include="ConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConnectionForm.Designer.cs">
+      <DependentUpon>ConnectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainMenu.Designer.cs">
+      <DependentUpon>MainMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PromotionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PromotionForm.Designer.cs">
+      <DependentUpon>PromotionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TypeOfMoves.cs" />
+    <Compile Include="WhitePieces\WhiteBishop2.cs" />
+    <Compile Include="WhitePieces\WhiteBishop.cs" />
+    <Compile Include="WhitePieces\WhiteKing.cs" />
+    <Compile Include="WhitePieces\WhiteKnight2.cs" />
+    <Compile Include="WhitePieces\WhiteKnight.cs" />
+    <Compile Include="WhitePieces\WhitePawn.cs" />
+    <Compile Include="WhitePieces\WhiteQueen.cs" />
+    <Compile Include="WhitePieces\WhiteRook1.cs" />
+    <Compile Include="WhitePieces\WhiteRook2.cs" />
+    <Compile Include="BlackPieces\BlackBishop.cs" />
+    <Compile Include="BlackPieces\BlackKing.cs" />
+    <Compile Include="BlackPieces\BlackKnight.cs" />
+    <Compile Include="BlackPieces\BlackQueen.cs" />
+    <Compile Include="BlackPieces\BlackRook1.cs" />
+    <Compile Include="BlackPieces\BlackRook2.cs" />
+    <Compile Include="TableClass.cs" />
+    <Compile Include="BlackPieces\BlackPawn.cs" />
+    <Compile Include="ClickUserClass.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ClickUserClass.Designer.cs">
+      <DependentUpon>ClickUserClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InGameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InGameForm.Designer.cs">
+      <DependentUpon>InGameForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ConnectionForm.resx">
+      <DependentUpon>ConnectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InGameForm.resx">
+      <DependentUpon>InGameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainMenu.resx">
+      <DependentUpon>MainMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PromotionForm.resx">
+      <DependentUpon>PromotionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\SotetBastya.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\SotetFuto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\SotetHuszar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\SotetKiraly.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\SotetKiralyno.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\SotetParaszt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\VilagosBastya.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\VilagosFuto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\VilagosHuszar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\VilagosKiraly.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\VilagosKiralyno.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Kepek\VilagosParaszt.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
