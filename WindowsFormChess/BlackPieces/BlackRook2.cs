@@ -27,98 +27,12 @@ namespace Sakk_Alkalmazás_2._0
                 {
                     if (Table[i, j] == 07)
                     {
-                        goto End;
+                        PossibleMoves = typeOfMoves.BlackVerticalAndHorizontalMoves(Table, PossibleMoves, i, j); return PossibleMoves;
                     }
 
-                }
-                if (i == 7)
-                {
-                    return PossibleMoves;
-                }
-            }
-        End:
-            int b;
-            for (b = i - 1; b > -1; b--)
-            {
-                if (Table[b, j] == 0)
-                {
-                    PossibleMoves[b, j] = 2;
-                }
-                else
-                {
-                    if (Table[b, j] < 10)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        PossibleMoves[b, j] = 2;
-                        break;
-                    }
-                }
-            }
-            //lefele lépés ütközésig
-            for (b = i + 1; b < 8; b++)
-            {
-                if (Table[b, j] == 0)
-                {
-                    PossibleMoves[b, j] = 2;
-                }
-                else
-                {
-                    if (Table[b, j] < 10)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        PossibleMoves[b, j] = 2;
-                        break;
-                    }
-                }
-            }
-            //balra lépés ütközésig
-            for (b = j - 1; b > -1; b--)
-            {
-                if (Table[i, b] == 0)
-                {
-                    PossibleMoves[i, b] = 2;
-                }
-                else
-                {
-                    if (Table[i, b] < 10)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        PossibleMoves[i, b] = 2;
-                        break;
-                    }
-                }
-            }
-            //jobbra lépés ütközésig
-            for (b = j + 1; b < 8; b++)
-            {
-                if (Table[i, b] == 0)
-                {
-                    PossibleMoves[i, b] = 2;
-                }
-                else
-                {
-                    if (Table[i, b] < 10)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        PossibleMoves[i, b] = 2;
-                        break;
-                    }
                 }
             }
             return PossibleMoves;
         }
-
     }
 }

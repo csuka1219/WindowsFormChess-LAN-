@@ -27,67 +27,7 @@ namespace Sakk_Alkalmazás_2._0
                 {
                     if (Table[i, j] == 04)
                     {
-                        int b;
-                        //balra felfele
-                        for (b = 1; b < 8; b++)
-                        {
-                            if (i - b >= 0 && j - b >= 0)
-                            {
-                                if (Table[i - b, j - b] == 0 || Table[i - b, j - b] > 10)
-                                {
-                                    PossibleMoves[i - b, j - b] = 2; if (Table[i - b, j - b] > 10) break;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        //jobbra felfele
-                        for (b = 1; b < 8; b++)
-                        {
-                            if (i - b >= 0 && j + b < 8)
-                            {
-                                if (Table[i - b, j + b] == 0 || Table[i - b, j + b] > 10)
-                                {
-                                    PossibleMoves[i - b, j + b] = 2; if (Table[i - b, j + b] > 10) break;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        //balra felfele
-                        for (b = 1; b < 8; b++)
-                        {
-                            if (i + b < 8 && j - b >= 0)
-                            {
-                                if (Table[i + b, j - b] == 0 || Table[i + b, j - b] > 10)
-                                {
-                                    PossibleMoves[i + b, j - b] = 2; if (Table[i + b, j - b] > 10) break;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        //jobbra lefele
-                        for (b = 1; b < 8; b++)
-                        {
-                            if (i + b < 8 && j + b < 8)
-                            {
-                                if (Table[i + b, j + b] == 0 || Table[i + b, j + b] > 10)
-                                {
-                                    PossibleMoves[i + b, j + b] = 2; if (Table[i + b, j + b] > 10) break;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
+                        PossibleMoves = typeOfMoves.BlackDiagonalMoves(Table, PossibleMoves, i, j);
                     }
                 }
             }
