@@ -24,3 +24,16 @@ C:\Users\user\Desktop\régi exelek\WindowsFormChess\WindowsFormChess\obj\Debug\W
 C:\Users\user\Desktop\régi exelek\WindowsFormChess\WindowsFormChess\obj\Debug\WindowsFormChess.csproj.CoreCompileInputs.cache
 C:\Users\user\Desktop\régi exelek\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk Alkalmazás 2.0.exe
 C:\Users\user\Desktop\régi exelek\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk Alkalmazás 2.0.pdb
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\bin\Debug\Sakk Alkalmazás 2.0.exe.config
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\bin\Debug\Sakk Alkalmazás 2.0.exe
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\bin\Debug\Sakk Alkalmazás 2.0.pdb
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\WindowsFormChess.csproj.AssemblyReference.cache
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk_Alkalmazás_2._0.ConnectionForm.resources
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk_Alkalmazás_2._0.InGameForm.resources
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk_Alkalmazás_2._0.MainMenu.resources
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk_Alkalmazás_2._0.PromotionForm.resources
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk_Alkalmazás_2._0.Properties.Resources.resources
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\WindowsFormChess.csproj.GenerateResource.cache
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\WindowsFormChess.csproj.CoreCompileInputs.cache
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk Alkalmazás 2.0.exe
+C:\Users\csuka\source\repos\WindowsFormChess\WindowsFormChess\obj\Debug\Sakk Alkalmazás 2.0.pdb
