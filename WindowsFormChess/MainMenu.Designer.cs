@@ -35,21 +35,21 @@ namespace Sakk_Alkalmazás_2._0
             // 
             // Start_btn
             // 
-            this.Start_btn.Location = new System.Drawing.Point(130, 58);
+            this.Start_btn.Location = new System.Drawing.Point(78, 65);
             this.Start_btn.Name = "Start_btn";
             this.Start_btn.Size = new System.Drawing.Size(176, 66);
             this.Start_btn.TabIndex = 0;
-            this.Start_btn.Text = "Start Game";
+            this.Start_btn.Text = "Single Game";
             this.Start_btn.UseVisualStyleBackColor = true;
             this.Start_btn.Click += new System.EventHandler(this.Start_btn_Click);
             // 
             // Connection_btn
             // 
-            this.Connection_btn.Location = new System.Drawing.Point(130, 153);
+            this.Connection_btn.Location = new System.Drawing.Point(78, 160);
             this.Connection_btn.Name = "Connection_btn";
             this.Connection_btn.Size = new System.Drawing.Size(176, 64);
             this.Connection_btn.TabIndex = 1;
-            this.Connection_btn.Text = "Local";
+            this.Connection_btn.Text = "Lan Game";
             this.Connection_btn.UseVisualStyleBackColor = true;
             this.Connection_btn.Click += new System.EventHandler(this.Connection_btn_Click);
             // 
@@ -57,7 +57,7 @@ namespace Sakk_Alkalmazás_2._0
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 405);
+            this.ClientSize = new System.Drawing.Size(341, 332);
             this.Controls.Add(this.Connection_btn);
             this.Controls.Add(this.Start_btn);
             this.Name = "MainMenu";
