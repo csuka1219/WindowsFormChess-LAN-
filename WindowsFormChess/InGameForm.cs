@@ -57,9 +57,9 @@ namespace Sakk_Alkalmazás_2._0
         public int BeforeMove_I;
         public int BeforeMove_J;
         public int LastMovedPiece = 0;
-        public int LastHitPiece = 0;
         public int Moves = 0;
         public int Castling = 0;
+        public int Promotionvalue = 0;
         public int PromotedPiece { get; set; }
         #endregion
         ClickUserClass[,] TableBackground;
@@ -184,7 +184,6 @@ namespace Sakk_Alkalmazás_2._0
             {
                 for (j = 0; j < 8; j++)
                 {
-                    //bábuk képeinek hozzáadása
                     switch (tableClass.Table[i, j])
                     {
                         case 00: TableBackground[i, j].BackgroundImage = null; break;
@@ -209,6 +208,8 @@ namespace Sakk_Alkalmazás_2._0
                     }
                 }
             }
+            StaleArrays();
+            tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray);
         }
         //in this event we will give the position of the selected piece to our method
         void ClickUserClass_Click(object sender, EventArgs e)
@@ -239,6 +240,7 @@ namespace Sakk_Alkalmazás_2._0
                     EndMove();
                     break;
             }
+            tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray);
         }
         //this method will calculate the avalaible moves of the selected piece
         //x is equals to the value of the selected piece, the i and the j is the position of it
@@ -453,83 +455,143 @@ namespace Sakk_Alkalmazás_2._0
             BlackStaleArray = whiteQueen.IsStale(tableClass.Table, BlackStaleArray);
 
         }
-        private void MessageReceiver_DoWork(object sender, DoWorkEventArgs e)
+        //this method will happening when one of the players did a valid move, it get the position of the piece after the move
+        public void SuccesfulMove(int i, int j)
         {
-            ReceiveMove();
-        }
-        private void ReceiveMove()
-        {
-            byte[] buffer = new byte[7];
-            sock.Receive(buffer);
-            tableClass.Table[buffer[1], buffer[2]] = 0;
-            tableClass.Table[buffer[3], buffer[4]] = buffer[0];
-            if (buffer[6] == 1)
+            enablesocket = true;
+            if (!singleGame)
             {
-                if (buffer[4] == 2)
+                //first of all if we play Lan game, we must save that which piece was moved
+                //this is very important because we have to send this data as byte to the enemy with socket
+                for (int x = 0; x < 20; x++)
+                {
+                    if(tableClass.Table[BeforeMove_I, BeforeMove_J] == x)
+                    {
+                        LastMovedPiece = x;
+                    }
+                }
+            }
+            //in our next method we will check that castling (king rook swap) is possible
+            //and if one of the pawns went throught the board(promotion) we should do something as well
+            CastlingAndPawnPromotionChecker(i,j);
+            //and this is the point where we give the moved piece to the new position
+            tableClass.Table[i, j] = tableClass.Table[BeforeMove_I, BeforeMove_J];
+            //these if-s is for the castling, and we will send the "Castling" integer to the enemy, if we play on Lan
+            //if Castling is 1 the black player did castling, if its 2, then the white one did it
+            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 06)
+            {
+                if (i == 0 && j == 2)
                 {
                     tableClass.Table[0, 3] = 02;
                     tableClass.Table[0, 0] = 0;
                 }
-                if (buffer[4] == 6)
+                if (i == 0 && j == 6)
                 {
                     tableClass.Table[0, 5] = 02;
                     tableClass.Table[0, 7] = 0;
                 }
+                Castling = 1;
             }
-            if (buffer[6] == 2)
+            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 16)
             {
-                if (buffer[4] == 2)
+                if (i == 7 && j == 2)
                 {
                     tableClass.Table[7, 3] = 12; tableClass.Table[7, 0] = 0;
                 }
-                if (buffer[4] == 6)
+                if (i == 7 && j == 6)
                 {
                     tableClass.Table[7, 5] = 12; tableClass.Table[7, 7] = 0;
                 }
-
+                Castling = 2;
             }
-            WhiteTurn = !WhiteTurn;
+            //naturally we should null the previously position of the piece
+            tableClass.Table[BeforeMove_I, BeforeMove_J] = 0;
+            //we call our drawing method
             Pieces();
-            StaleArrays();
-            tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray);
-            OtherPlayerTurn = false;
-            if (buffer[5] == 0)
+            //we should reset the color of the board at this point as well
+            EndMove();
+            //now we will save every possible move of the player who will turn in an array
+            //that will be important because if that array is null that means the player got checkmate that equals to the game is over
+            EveryPossibleMoves();
+            //after we got our array we will check that is there checkmate or not
+            CheckMateChecker(i,j);
+            //if its Lan game, we call this method with the new position
+            if (enablesocket && !singleGame && !GameOver)
             {
-                if (WhiteTurn)
-                {
-                    MessageBox.Show("You Lost!");
-                }
-                else
-                {
-                    MessageBox.Show("You lost!");
-                }
+                SendMove(i, j);
             }
+            //the opponent turn
+            WhiteTurn = !WhiteTurn;
         }
-        private void SendMove(int i, int j)
+        //several bools
+        public void CastlingAndPawnPromotionChecker(int i,int j)
         {
-            byte[] datas = { (byte)LastMovedPiece, (byte)BeforeMove_I, (byte)BeforeMove_J, (byte)i, (byte)j, (byte)Moves, (byte)Castling };
-            sock.Send(datas);
-            MessageReceiver.DoWork += MessageReceiver_DoWork;
-            if (!MessageReceiver.IsBusy)
+            //if one of the player moved with his rook or king then they can not make castling anymore
+            //we check this in this switch
+            switch (tableClass.Table[BeforeMove_I, BeforeMove_J])
             {
-                MessageReceiver.RunWorkerAsync();
+                case 02:
+                    BlackRookMoved1 = false;
+                    break;
+                case 07:
+                    BlackRookMoved2 = false;
+                    break;
+                case 12:
+                    WhiteRookMoved1 = false;
+                    break;
+                case 17:
+                    WhiteRookMoved2 = false;
+                    break;
+                case 06:
+                    BlackKingMoved = false;
+                    break;
+                case 16:
+                    WhiteKingMoved = false;
+                    break;
             }
-            OtherPlayerTurn = true;
+
+            //if promotion is available we will active an other form where we can select that we want instead of the pawn
+            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 01)
+            {
+                if (i == 7)
+                {
+                    PromotionForm Promotion = new PromotionForm(false);
+                    Promotion.ShowDialog();
+                    tableClass.Table[BeforeMove_I, BeforeMove_J] = Promotion.PromotedPiece;
+                    Promotionvalue = Promotion.PromotedPiece;
+                }
+            }
+            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 11)
+            {
+                if (i == 0)
+                {
+                    PromotionForm Promotion = new PromotionForm(true);
+                    Promotion.ShowDialog();
+                    tableClass.Table[BeforeMove_I, BeforeMove_J] = Promotion.PromotedPiece;
+                    Promotionvalue = Promotion.PromotedPiece;
+                }
+            }
         }
+        //get every moves of the player
         public void EveryPossibleMoves()
         {
             int i = 0;
             int j = 0;
+            //we should reset the array after every move
             tableClass.AllPossibleMoves = new int[8,8];
+            //this need because we need that player who isn't turned yet
             WhiteTurn = !WhiteTurn;
+            //pieces
             for (int x = 1; x < 20; x++)
             {
+                //and positions
                 for (i = 0; i < 8; i++)
                 {
                     for (j = 0; j < 8; j++)
                     {
                         if (tableClass.Table[i, j] == x)
                         {
+                            //similar like earlier switchs
                             switch (x)
                             {
                                 case 1:
@@ -587,178 +649,44 @@ namespace Sakk_Alkalmazás_2._0
                                     tableClass.AllPossibleMoves = whiteBishop2.GetPossibleMoves(tableClass.Table, tableClass.AllPossibleMoves, i, j, WhiteTurn,OtherPlayerTurn);
                                     break;
                             }
+                            //okay we got moves by pieces, now we should delete that are invalids
                             RemoveMoveThatNotPossible2(x, i, j);
                         }
                     }
                 }
-
             }
+            //and now we change back it
             WhiteTurn = !WhiteTurn;
         }
-        public void CastlingAndPawnPromotionChecker(int i,int j)
-        {
-            //Castling
-            if (tableClass.Table[BeforeMove_I,BeforeMove_J] == 02)
-            {
-                BlackRookMoved1 = false;
-            }
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 07)
-            {
-                BlackRookMoved2 = false;
-            }
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 12)
-            {
-                WhiteRookMoved1 = false;
-            }
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 17)
-            {
-                WhiteRookMoved2 = false;
-            }
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 06)
-            {
-                BlackKingMoved = false;
-            }
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 16)
-            {
-                WhiteKingMoved = false;
-            }
-
-            //Promotions TODO
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 01)
-            {
-                if (i == 7)
-                {
-                    PromotionForm Promotion = new PromotionForm(false);
-                    Promotion.ShowDialog();
-                    tableClass.Table[BeforeMove_I, BeforeMove_J] = Promotion.PromotedPiece;
-                }
-            }
-            //Világos gyalog beérés 
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 11)
-            {
-                if (i == 0)
-                {
-                    PromotionForm Promotion = new PromotionForm(true);
-                    Promotion.ShowDialog();
-                    tableClass.Table[BeforeMove_I, BeforeMove_J] = Promotion.PromotedPiece;
-                }
-            }
-        }
-        public void SuccesfulMove(int i, int j)
-        {
-            enablesocket = true;
-            for (int x = 0; x < 20; x++)
-            {
-                if(tableClass.Table[BeforeMove_I, BeforeMove_J] == x)
-                {
-                    LastMovedPiece = x;
-                }
-            }
-            for (int x = 0; x < 20; x++)
-            {
-                if(tableClass.Table[i, j] == x)
-                {
-                    LastHitPiece = x;
-                }
-            }
-
-            CastlingAndPawnPromotionChecker(i,j);
-            tableClass.Table[i, j] = tableClass.Table[BeforeMove_I, BeforeMove_J];
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 06)
-            {
-                if (i == 0 && j == 2)
-                {
-                    tableClass.Table[0, 3] = 02;
-                    tableClass.Table[0, 0] = 0;
-                }
-                if (i == 0 && j == 6)
-                {
-                    tableClass.Table[0, 5] = 02;
-                    tableClass.Table[0, 7] = 0;
-                }
-                Castling = 1;
-            }
-            if (tableClass.Table[BeforeMove_I, BeforeMove_J] == 16)
-            {
-                if (i == 7 && j == 2)
-                {
-                    tableClass.Table[7, 3] = 12; tableClass.Table[7, 0] = 0;
-                }
-                if (i == 7 && j == 6)
-                {
-                    tableClass.Table[7, 5] = 12; tableClass.Table[7, 7] = 0;
-                }
-                Castling = 2;
-            }
-            tableClass.Table[BeforeMove_I, BeforeMove_J] = 0;
-
-            Pieces();
-            StaleChecker(i, j);
-            EndMove();
-            EveryPossibleMoves();
-            CheckMateChecker(i,j);
-            if (enablesocket && !singleGame && !GameOver)
-            {
-                SendMove(i, j);
-            }
-            WhiteTurn = !WhiteTurn;
-        }
-        public void StaleChecker(int i, int j)
-        {
-            if (tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray) == true)
-            {
-                StaleArrays();
-                if (tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray) == true)
-                {
-                    UnSuccesfulMove(i, j);
-                    enablesocket = false;
-                }
-            }
-            else
-            {
-                StaleArrays();
-                if (tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray) == true && WhiteTurn && tableClass.WhiteStaleUp)
-                {
-                    UnSuccesfulMove(i, j);
-                    enablesocket = false;
-                }
-                if (tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray) == true && !WhiteTurn && tableClass.BlackStaleUp)
-                {
-                    UnSuccesfulMove(i, j);
-                    enablesocket = false;
-                }
-            }
-            StaleArrays();
-            tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray);
-        }
-        public void UnSuccesfulMove(int i, int j)
-        {
-            tableClass.Table[BeforeMove_I, BeforeMove_J] = LastMovedPiece;
-            tableClass.Table[i, j] = LastHitPiece;
-            Pieces();
-            WhiteTurn = !WhiteTurn;
-        }
+        //lets delete invalid moves
         public void RemoveMoveThatNotPossible2(int x, int a, int b)
         {
+            //you already know this
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
+                    //you can remember that value 2 is the possible moves
                     if (tableClass.AllPossibleMoves[i, j] == 2)
                     {
+                        //and this is very familiar than the "RemoveMoveThatNotPossible", lets simulate
                         int lastHitPiece = tableClass.Table[i, j];
                         
                         tableClass.Table[i, j] = x;
                         tableClass.Table[a, b] = 0;
                         StaleArrays();
+                        //invalid move
                         if (tableClass.NotValidMoveChecker(tableClass.Table, WhiteStaleArray, BlackStaleArray) == 1 && WhiteTurn)
                         {
                             tableClass.AllPossibleMoves[i, j] = 0;
                         }
+                        //invalid move
                         if (tableClass.NotValidMoveChecker(tableClass.Table, WhiteStaleArray, BlackStaleArray) == 2 && !WhiteTurn)
                         {
                             tableClass.AllPossibleMoves[i, j] = 0;
                         }
+                        //this is a valid move, so we increment the Moves integer
+                        //if Moves not equals to 0, than its not checkmate
                         if (tableClass.NotValidMoveChecker(tableClass.Table, WhiteStaleArray, BlackStaleArray) == 3)
                         {
                             Moves++;
@@ -771,39 +699,98 @@ namespace Sakk_Alkalmazás_2._0
             }
             tableClass.AllPossibleMoves = new int[8, 8];
         }
+        //and this is where we decide that the game is over or not
         public void CheckMateChecker(int a, int b)
         {
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (tableClass.AllPossibleMoves[i, j] == 2)
-                    {
-                        Moves++;
-                    }
-                }
-            }
             if (Moves == 0)
             {
                 GameOver = true;
+                //the game is over, but nevertheless we send the last move to the opponent
                 if (enablesocket && !singleGame)
                 {
                     SendMove(a, b);
                 }
+                MessageBox.Show("You Win!");
+            }
+        }
+        //socket things
+        private void MessageReceiver_DoWork(object sender, DoWorkEventArgs e)
+        {
+            ReceiveMove();
+        }
+        //and this is where we send datas using socket
+        private void SendMove(int i, int j)
+        {
+            //we should send the moved piece, and its position, the new position, the checkmate counter and the value of castling, and promotionalue
+            byte[] datas = { (byte)LastMovedPiece, (byte)BeforeMove_I, (byte)BeforeMove_J, (byte)i, (byte)j, (byte)Moves, (byte)Castling, (byte)Promotionvalue };
+            sock.Send(datas);
+            MessageReceiver.DoWork += MessageReceiver_DoWork;
+            if (!MessageReceiver.IsBusy)
+            {
+                MessageReceiver.RunWorkerAsync();
+            }
+            OtherPlayerTurn = true;
+        }
+        //this is where the other player got datas
+        private void ReceiveMove()
+        {
+            byte[] buffer = new byte[8];
+            sock.Receive(buffer);
+            //previously position have to be 0
+            tableClass.Table[buffer[1], buffer[2]] = 0;
+            //new position with the piece
+            tableClass.Table[buffer[3], buffer[4]] = buffer[0];
+            //castling
+            if (buffer[6] == 1)
+            {
+                if (buffer[4] == 2)
+                {
+                    tableClass.Table[0, 3] = 02;
+                    tableClass.Table[0, 0] = 0;
+                }
+                if (buffer[4] == 6)
+                {
+                    tableClass.Table[0, 5] = 02;
+                    tableClass.Table[0, 7] = 0;
+                }
+            }
+            if (buffer[6] == 2)
+            {
+                if (buffer[4] == 2)
+                {
+                    tableClass.Table[7, 3] = 12; tableClass.Table[7, 0] = 0;
+                }
+                if (buffer[4] == 6)
+                {
+                    tableClass.Table[7, 5] = 12; tableClass.Table[7, 7] = 0;
+                }
+            }
+            //get promoted piece
+            if (buffer[7] > 0)
+            {
+                tableClass.Table[buffer[3], buffer[4]] = buffer[7];
+            }
+            //toggle turn
+            WhiteTurn = !WhiteTurn;
+            //i think we know this
+            Pieces();
+            StaleArrays();
+            tableClass.MarkStale(TableBackground, tableClass.Table, WhiteStaleArray, BlackStaleArray);
+            OtherPlayerTurn = false;
+            //losing screen
+            if (buffer[5] == 0)
+            {
                 if (WhiteTurn)
                 {
-                    MessageBox.Show("You Win!");
+                    MessageBox.Show("You Lost!");
                 }
                 else
                 {
-                    MessageBox.Show("You Win!");
+                    MessageBox.Show("You lost!");
                 }
-                //this.Hide();
-                //MainMenu main = new MainMenu();
-                //main.ShowDialog();
-                //this.Close();
             }
         }
+        //end connection
         private void InGameForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             MessageReceiver.WorkerSupportsCancellation = true;
